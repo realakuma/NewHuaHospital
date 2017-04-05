@@ -74,7 +74,7 @@ def main():
     except:
         # get detail from sys.exc_info() method
         error_type, error_value, trace_back = sys.exc_info()
-        logger.info("error_value");
+        logger.info(error_value);
 
 
 
