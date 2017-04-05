@@ -28,7 +28,7 @@ def timer(n):
         if current_hour in time_range:
             d=15
         else:
-            d=10
+            d=3600
         time.sleep(d)
 
 
