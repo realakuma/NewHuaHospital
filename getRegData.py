@@ -8,27 +8,26 @@ import time
 import sys
 from log import Logger;
 
-
 mailto_list = ["realakuma@163.com"]
 mail_host = "smtp.163.com"
 mail_user = "realakuma@163.com"
 mail_pass = "8B9zqr@123"
 mail_postfix = "XXX.com"
 logger = Logger(logName='log.txt', logLevel="INFO", logger="getRegData.py").getlog()
-hjson=""
+json_str = ""
+
 
 def timer(n):
-
     while True:
         logger.info("start");
 
         main()
         current_hour = int(time.strftime('%H', time.localtime(time.time())))
-        time_range=[00,01,20]
+        time_range = [00, 01, 20]
         if current_hour in time_range:
-            d=15
+            d = 15
         else:
-            d=3600
+            d = 3600
         time.sleep(d)
 
 
@@ -61,26 +60,30 @@ def post(url, data):
 
 def main():
     try:
+        global json_str
         posturl = "http://wx.zhicall.cn/dragon-wechat/yuyueGuahao/schedule/findExpertSchedules"
         data = {'hospitalId': '10012', 'deptId': '12305', 'expertId': '12146'}
+
         hjson = json.loads(post(posturl, data))
+
+        json_str = json.dumps(hjson, ensure_ascii=False, indent=2)
 
         for time in hjson["data"]["regScheduleVOList"][0]["times"]:
             if time["leftNum"] > 0:
                 send_mail(mailto_list,
-                      "NewHua Hospital RegTime -" + hjson["data"]["regScheduleVOList"][0]["regDate"] + time["timeline"],
-                      "Total" + str(time["totalNum"]) + "left:" + str(time["leftNum"]))
-            # print hjson["data"]["regScheduleVOList"][0]["time"]
+                          "NewHua Hospital RegTime -" + hjson["data"]["regScheduleVOList"][0]["regDate"] + time[
+                              "timeline"],
+                          "Total" + str(time["totalNum"]) + "left:" + str(time["leftNum"]))
+                # print hjson["data"]["regScheduleVOList"][0]["time"]
     except:
         # get detail from sys.exc_info() method
         error_type, error_value, trace_back = sys.exc_info()
-        logger.info(error_value);
+        logger.info(error_value)
+        logger.info(json_str)
         send_mail(mailto_list,
                   "NewHua Hospital Reg Error",
-                  hjson+" "+error_value)
-
+                  json_str + str(error_value))
 
 
 if __name__ == '__main__':
-
-     timer(10);
+    timer(10);
