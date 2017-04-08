@@ -15,7 +15,7 @@ mail_user = "realakuma@163.com"
 mail_pass = "8B9zqr@123"
 mail_postfix = "XXX.com"
 logger = Logger(logName='log.txt', logLevel="INFO", logger="getRegData.py").getlog()
-
+hjson=""
 
 def timer(n):
 
@@ -68,13 +68,16 @@ def main():
         for time in hjson["data"]["regScheduleVOList"][0]["times"]:
             if time["leftNum"] > 0:
                 send_mail(mailto_list,
-                      "NewHua Hospital RegTim -" + hjson["data"]["regScheduleVOList"][0]["regDate"] + time["timeline"],
+                      "NewHua Hospital RegTime -" + hjson["data"]["regScheduleVOList"][0]["regDate"] + time["timeline"],
                       "Total" + str(time["totalNum"]) + "left:" + str(time["leftNum"]))
             # print hjson["data"]["regScheduleVOList"][0]["time"]
     except:
         # get detail from sys.exc_info() method
         error_type, error_value, trace_back = sys.exc_info()
         logger.info(error_value);
+        send_mail(mailto_list,
+                  "NewHua Hospital Reg Error",
+                  hjson+" "+error_value)
 
 
 
