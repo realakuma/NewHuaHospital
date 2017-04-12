@@ -23,7 +23,7 @@ def timer(n):
 
         main()
         current_hour = int(time.strftime('%H', time.localtime(time.time())))
-        time_range = [00, 01, 20]
+        time_range = [22,23,00, 01]
         if current_hour in time_range:
             d = 15
         else:
