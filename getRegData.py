@@ -6,7 +6,8 @@ import smtplib
 from email.mime.text import MIMEText
 import time
 import sys
-from log import Logger;
+from log import Logger
+import httplib
 
 mailto_list = ["realakuma@163.com"]
 mail_host = "smtp.163.com"
@@ -68,6 +69,7 @@ def main():
 
         json_str = json.dumps(hjson, ensure_ascii=False, indent=2)
 
+
         for time in hjson["data"]["regScheduleVOList"][0]["times"]:
             if time["leftNum"] > 0:
                 send_mail(mailto_list,
@@ -75,6 +77,9 @@ def main():
                               "timeline"],
                           "Total" + str(time["totalNum"]) + "left:" + str(time["leftNum"]))
                 # print hjson["data"]["regScheduleVOList"][0]["time"]
+
+    except httplib.IncompleteRead, e:
+        logger.info(e.partial)
     except:
         # get detail from sys.exc_info() method
         error_type, error_value, trace_back = sys.exc_info()
