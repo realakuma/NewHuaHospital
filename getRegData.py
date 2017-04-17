@@ -62,6 +62,7 @@ def post(url, data):
 def main():
     try:
         global json_str
+        json_str=""
         posturl = "http://wx.zhicall.cn/dragon-wechat/yuyueGuahao/schedule/findExpertSchedules"
         data = {'hospitalId': '10012', 'deptId': '12305', 'expertId': '12146'}
 
