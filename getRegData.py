@@ -28,7 +28,7 @@ def timer(n):
         current_date=time.strftime('%Y-%m-%d', time.localtime(time.time()))
         current_hour = int(time.strftime('%H', time.localtime(time.time())))
         time_range = [22,23,00, 01]
-        if current_hour in time_range or desire_date==current_date:
+        if current_hour in time_range or (current_date<=reg_date):
             d = 15
         else:
             d = 3600
