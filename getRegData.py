@@ -9,10 +9,10 @@ import sys
 from log import Logger
 import httplib
 
-mailto_list = ["realakuma@163.com"]
+mailto_list = ["akuma_cool@163.com"]
 mail_host = "smtp.163.com"
-mail_user = "realakuma@163.com"
-mail_pass = "8B9zqr@123"
+mail_user = "akuma_cool@163.com"
+mail_pass = "Abcd1234"
 mail_postfix = "XXX.com"
 logger = Logger(logName='log.txt', logLevel="INFO", logger="getRegData.py").getlog()
 json_str = ""
@@ -21,9 +21,10 @@ json_str = ""
 def timer(n):
     while True:
         logger.info("start");
+        desire_date = "2017-05-01";
+        reg_date = "2017-05-16"
+        main(desire_date,reg_date)
 
-        main()
-        desire_date="2017-05-01";
         current_date=time.strftime('%Y-%m-%d', time.localtime(time.time()))
         current_hour = int(time.strftime('%H', time.localtime(time.time())))
         time_range = [22,23,00, 01]
@@ -61,7 +62,7 @@ def post(url, data):
     return response.read()
 
 
-def main():
+def main(desire_date,reg_date):
     try:
         global json_str
         json_str=""
@@ -73,9 +74,10 @@ def main():
         json_str = json.dumps(hjson, ensure_ascii=False, indent=2)
 
 
-        for time in hjson["data"]["regScheduleVOList"][0]["times"]:
-            if time["leftNum"] > 0:
-                send_mail(mailto_list,
+        for regSchedulelist in hjson["data"]["regScheduleVOList"]:
+            for time in regSchedulelist["times"]:
+                if time["leftNum"] > 0 and regSchedulelist["regDate"]==reg_date:
+                    send_mail(mailto_list,
                           "NewHua Hospital RegTime -" + hjson["data"]["regScheduleVOList"][0]["regDate"] + time[
                               "timeline"],
                           "Total" + str(time["totalNum"]) + "left:" + str(time["leftNum"]))
