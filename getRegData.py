@@ -78,7 +78,7 @@ def main(desire_date,reg_date):
             for time in regSchedulelist["times"]:
                 if time["leftNum"] > 0 and regSchedulelist["regDate"]==reg_date:
                     send_mail(mailto_list,
-                          "NewHua Hospital RegTime -" + hjson["data"]["regScheduleVOList"][0]["regDate"] + time[
+                          "NewHua Hospital RegTime -" + regSchedulelist["regDate"] + time[
                               "timeline"],
                           "Total" + str(time["totalNum"]) + "left:" + str(time["leftNum"]))
                 # print hjson["data"]["regScheduleVOList"][0]["time"]
