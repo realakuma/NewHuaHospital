@@ -8,6 +8,7 @@ import time
 import sys
 from log import Logger
 import httplib
+import datetime
 
 mailto_list = ["akuma_cool@163.com"]
 mail_host = "smtp.163.com"
@@ -21,19 +22,27 @@ json_str = ""
 def timer(n):
     while True:
         logger.info("start");
-        desire_date = "2017-05-01";
-        reg_date = ["2017-06-06","2017-06-13"]
-        main(desire_date,reg_date)
+        begin_date = "";
+        reg_date = ["2017-06-06", "2017-06-13", "2017-06-20"]
+        main(begin_date, reg_date)
 
-        current_date=time.strftime('%Y-%m-%d', time.localtime(time.time()))
+        current_date = time.strftime('%Y-%m-%d', time.localtime(time.time()))
         current_hour = int(time.strftime('%H', time.localtime(time.time())))
-        time_range = [22,23,00, 01]
-        if current_hour in time_range or (current_date<=reg_date):
+        begin_date=generate_begin_date(current_date,reg_date)
+        time_range = [22, 23, 00, 01]
+        if current_hour in time_range or (current_date >= begin_date):
             d = 15
         else:
             d = 3600
         time.sleep(d)
 
+
+def generate_begin_date(current_date, reg_date):
+    begin_date = ""
+    for each_date in reg_date:
+        if current_date<=each_date:
+            begin_date = datetime.datetime.strptime(each_date, "%Y-%m-%d") - datetime.timedelta(days=14)
+            return begin_date.strftime('%Y-%m-%d')
 
 def send_mail(to_list, sub, content):
     me = "hello" + "<" + mail_user + "@" + mail_postfix + ">"
@@ -62,10 +71,10 @@ def post(url, data):
     return response.read()
 
 
-def main(desire_date,reg_date):
+def main(desire_date, reg_date):
     try:
         global json_str
-        json_str=""
+        json_str = ""
         posturl = "http://wx.zhicall.cn/dragon-wechat/yuyueGuahao/schedule/findExpertSchedules"
         data = {'hospitalId': '10012', 'deptId': '12305', 'expertId': '12146'}
 
@@ -73,15 +82,14 @@ def main(desire_date,reg_date):
 
         json_str = json.dumps(hjson, ensure_ascii=False, indent=2)
 
-
         for regSchedulelist in hjson["data"]["regScheduleVOList"]:
             for time in regSchedulelist["times"]:
                 if time["leftNum"] > 0 and regSchedulelist["regDate"] in reg_date:
                     send_mail(mailto_list,
-                          "NewHua Hospital RegTime -" + regSchedulelist["regDate"] + time[
-                              "timeline"],
-                          "Total" + str(time["totalNum"]) + "left:" + str(time["leftNum"]))
-                # print hjson["data"]["regScheduleVOList"][0]["time"]
+                              "NewHua Hospital RegTime -" + regSchedulelist["regDate"] + time[
+                                  "timeline"],
+                              "Total" + str(time["totalNum"]) + "left:" + str(time["leftNum"]))
+                    # print hjson["data"]["regScheduleVOList"][0]["time"]
 
     except httplib.IncompleteRead, e:
         logger.info(e.partial)
