@@ -22,7 +22,7 @@ def timer(n):
     while True:
         logger.info("start");
         desire_date = "2017-05-01";
-        reg_date = "2017-05-16"
+        reg_date = ["2017-06-06","2017-06-13"]
         main(desire_date,reg_date)
 
         current_date=time.strftime('%Y-%m-%d', time.localtime(time.time()))
@@ -76,7 +76,7 @@ def main(desire_date,reg_date):
 
         for regSchedulelist in hjson["data"]["regScheduleVOList"]:
             for time in regSchedulelist["times"]:
-                if time["leftNum"] > 0 and regSchedulelist["regDate"]==reg_date:
+                if time["leftNum"] > 0 and regSchedulelist["regDate"] in reg_date:
                     send_mail(mailto_list,
                           "NewHua Hospital RegTime -" + regSchedulelist["regDate"] + time[
                               "timeline"],
