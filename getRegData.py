@@ -23,7 +23,7 @@ def timer(n):
     while True:
         logger.info("start");
         begin_date = "";
-        reg_date = ["2017-06-06", "2017-06-13", "2017-06-20"]
+        reg_date = ["2017-06-13", "2017-06-20", "2017-06-27"]
         main(begin_date, reg_date)
 
         current_date = time.strftime('%Y-%m-%d', time.localtime(time.time()))
