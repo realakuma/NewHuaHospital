@@ -9,11 +9,12 @@ import sys
 from log import Logger
 import httplib
 import datetime
+import userConfig
 
 mailto_list = ["akuma_cool@163.com"]
 mail_host = "smtp.163.com"
-mail_user = "akuma_cool@163.com"
-mail_pass = "Abcd1234"
+mail_user = userConfig.setting["mail_user"]
+mail_pass = userConfig.setting["mail_pass"]
 mail_postfix = "XXX.com"
 logger = Logger(logName='log.txt', logLevel="INFO", logger="getRegData.py").getlog()
 json_str = ""
@@ -23,7 +24,7 @@ def timer(n):
     while True:
         logger.info("start");
         begin_date = "";
-        reg_date = ["2017-06-13", "2017-06-20", "2017-06-27"]
+        reg_date = userConfig.setting["reg_date"]
         main(begin_date, reg_date)
 
         current_date = time.strftime('%Y-%m-%d', time.localtime(time.time()))
