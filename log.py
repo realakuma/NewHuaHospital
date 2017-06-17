@@ -15,6 +15,8 @@ class Logger():
         ch = logging.StreamHandler()
         ch.setLevel(logLevel)
 
+
+
         # 定义handler的输出格式
         log_format = logging.Formatter("%(asctime)s-%(name)s-%(levelname)s-%(message)s-[%(filename)s:%(lineno)d]")
         fh.setFormatter(log_format)
