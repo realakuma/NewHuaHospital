@@ -77,17 +77,19 @@ def main(desire_date, reg_date):
         global json_str
         json_str = ""
         posturl = "http://wx.zhicall.cn/dragon-wechat/yuyueGuahao/schedule/findExpertSchedules"
-        data = {'hospitalId': '10012', 'deptId': '12305', 'expertId': '12146'}
+        data = userConfig.setting["doctors_list"]
+        for data_single in data:
 
-        hjson = json.loads(post(posturl, data))
+            hjson = json.loads(post(posturl, data_single))
 
-        json_str = json.dumps(hjson, ensure_ascii=False, indent=2)
+            json_str = json.dumps(hjson, ensure_ascii=False, indent=2)
 
-        for regSchedulelist in hjson["data"]["regScheduleVOList"]:
-            for time in regSchedulelist["times"]:
-                if time["leftNum"] > 0 and regSchedulelist["regDate"] in reg_date:
-                    send_mail(mailto_list,
-                              "NewHua Hospital RegTime -" + regSchedulelist["regDate"] + time[
+            for regSchedulelist in hjson["data"]["regScheduleVOList"]:
+                for time in regSchedulelist["times"]:
+                    if time["leftNum"] >0:
+                        #and regSchedulelist["regDate"] in reg_date:
+                        send_mail(mailto_list,
+                              hjson["data"]["name"]+"-"+hjson["data"]["speciality"]+"-NewHua Hospital RegTime -" + regSchedulelist["regDate"] + time[
                                   "timeline"],
                               "Total" + str(time["totalNum"]) + "left:" + str(time["leftNum"]))
                     # print hjson["data"]["regScheduleVOList"][0]["time"]
